@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "712978214326",
+    "firebase_url": "https://cab-economics-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "cab-economics",
+    "storage_bucket": "cab-economics.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712978214326:android:1f8e3f59c30e10dd51e517",
+        "android_client_info": {
+          "package_name": "com.redpepper.cab_economics"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "712978214326-788ha7tafbamo35v7cq63jtkgjmgksdr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5pc0RelcI3gmRuRXfynSwDfGgyEwqCeU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "712978214326-788ha7tafbamo35v7cq63jtkgjmgksdr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
