@@ -1,6 +1,7 @@
 import 'package:cab_economics/helpers/CustomButtonStyles.dart';
 import 'package:cab_economics/helpers/CustomTextStyles.dart';
 import 'package:cab_economics/providers/shift_provider.dart';
+import 'package:cab_economics/widgets/add_new_ride_to_shift_dialog.dart';
 import 'package:cab_economics/widgets/end_shift_dialog.dart';
 import 'package:cab_economics/widgets/shift_report_alert_dialog.dart';
 import 'package:flutter/material.dart';
@@ -143,7 +144,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                   style: CustomButtonStyles.customButtons(
                                       Colors.blue),
                                   onPressed: () {
-                                    _showShiftReportDialog(context);
+                                    _showAddRideDialog(context);
                                   },
                                   child: const Text('Add Ride'),
                                 ),
@@ -267,6 +268,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
     showDialog(
       context: context,
       builder: (context) => ShortShiftReportDialog(),
+    );
+  }
+
+  void _showAddRideDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AddNewRideDialog(),
     );
   }
 }
