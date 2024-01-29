@@ -3,11 +3,11 @@ import 'package:cab_economics/helpers/CustomTextStyles.dart';
 import 'package:cab_economics/providers/shift_provider.dart';
 import 'package:cab_economics/widgets/add_new_ride_to_shift_dialog.dart';
 import 'package:cab_economics/widgets/end_shift_dialog.dart';
+import 'package:cab_economics/widgets/generic/menu_drawer.dart';
 import 'package:cab_economics/widgets/shift_report_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../helpers/helper_methods.dart';
-import '../models/shift.dart';
 
 class CalendarScreen extends StatefulWidget {
   static const String routeName = 'calendarScreen';
@@ -86,7 +86,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              print('Test');
+                              _showShiftReportDialog(context);
                             },
                             child: Card(
                               color: Colors.black54,
@@ -179,7 +179,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       child: ElevatedButton(
                         onPressed: () {},
                         style: CustomButtonStyles.customButtons(Colors.orange),
-                        child: Text(
+                        child: const Text(
                           'Add New Expense',
                         ),
                       ),
@@ -191,6 +191,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           ],
         ),
       ),
+      drawer: const MenuDrawer(),
     );
   }
 
@@ -243,18 +244,18 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
                     showDialog(
                       context: context,
-                      builder: (context) => EndShiftDialog(),
+                      builder: (context) => const EndShiftDialog(),
                     );
                   },
                   child: const Text('Yes')),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text('No')),
+                  child: const Text('No')),
             ],
           ),
         ],
@@ -267,14 +268,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
   void _showShiftReportDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => ShortShiftReportDialog(),
+      builder: (context) => const ShortShiftReportDialog(),
     );
   }
 
   void _showAddRideDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => AddNewRideDialog(),
+      builder: (context) => const AddNewRideDialog(),
     );
   }
 }

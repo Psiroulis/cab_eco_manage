@@ -1,3 +1,4 @@
+import 'package:cab_economics/providers/ride_provider.dart';
 import 'package:cab_economics/providers/ride_supplier_provider.dart';
 import 'package:cab_economics/providers/shift_provider.dart';
 import 'package:cab_economics/screens/calendar_screen.dart';
@@ -23,6 +24,8 @@ Future<void> main() async {
           ),
           ChangeNotifierProvider<RideSupplierProvider>(
               create: (_) => RideSupplierProvider()),
+          ChangeNotifierProvider<RideProvider>(
+              create: (_) => RideProvider()),
         ],
         child: const MyApp(),
       ),

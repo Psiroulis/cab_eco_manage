@@ -40,7 +40,7 @@ class _EditRemoveButtonListTileState extends State<EditRemoveButtonListTile> {
                           child: ListTile(
                               title: Text(
                                 data.rideSuppliers[index].name!,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black54,
@@ -91,7 +91,7 @@ class _EditRemoveButtonListTileState extends State<EditRemoveButtonListTile> {
                                           index,
                                         );
                                       },
-                                      icon: Icon(Icons.delete),
+                                      icon: const Icon(Icons.delete),
                                     ),
                                   ),
                                 ],

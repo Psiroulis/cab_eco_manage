@@ -1,29 +1,46 @@
-enum CalculateType { percentage, month }
+enum CommissionType { none, percentage, monthly }
 
 class RideSupplier {
   String? key;
   String? name;
-  CalculateType? calculateType;
-  int? commission;
-  double? costPerMonth;
+  CommissionType? commissionType;
+  double? commission;
+  bool? hasExtras;
+  double? extraCall;
+  double? extraApoint;
+  bool? hasSecretFees;
 
   RideSupplier({
     this.key,
     required this.name,
-    required this.calculateType,
-    this.commission = 0,
-    this.costPerMonth = 0.0
+    this.commissionType = CommissionType.none,
+    this.commission = 0.0,
+    this.hasExtras = false,
+    this.extraCall = 0.0,
+    this.extraApoint = 0.0,
+    this.hasSecretFees = false,
   });
 
   RideSupplier.fromJson(String keyFromApi, Map<dynamic, dynamic> json) {
     key = keyFromApi;
+
     name = json["name"];
-    if(json["calculation"] == "percentage"){
-      calculateType = CalculateType.percentage;
-    }else{
-      calculateType = CalculateType.month;
+
+    if (json["commissionType"] == CommissionType.none.toString()) {
+      commissionType = CommissionType.none;
+    } else if (json["commissionType"] == CommissionType.percentage.toString()) {
+      commissionType = CommissionType.percentage;
+    } else {
+      commissionType = CommissionType.monthly;
     }
-    commission = json["commission"];
-    costPerMonth = json["costPerMonth"].toDouble();
+    commission = json["commission"] + 0.0;
+
+    hasExtras = json['hasExtras'];
+
+    extraCall = json['extraCall'] + 0.0;
+
+    extraApoint = json['extraApoint'] + 0.0;
+
+    hasSecretFees = json['hasSecretFees'];
   }
 }

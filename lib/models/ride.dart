@@ -1,3 +1,6 @@
+import 'package:cab_economics/models/ride_supplier.dart';
+import 'package:cab_economics/providers/ride_provider.dart';
+
 enum PaymentType {
   cash,
   creditCard,
@@ -5,15 +8,18 @@ enum PaymentType {
 }
 
 class Ride {
-  String? providerId;
+  RideSupplier supplier;
   double? fare;
   PaymentType paymentType;
+  double? extraCost;
   DateTime? createdAt;
 
+
   Ride({
-    this.providerId = '',
-    this.fare = 0.0,
-    this.paymentType = PaymentType.cash,
+    required this.supplier,
+    required this.fare,
+    required this.paymentType,
+    this.extraCost,
     this.createdAt,
   });
 }

@@ -9,7 +9,7 @@ class EndShiftDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final shiftProvider = Provider.of<ShiftProvider>(context, listen: false);
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
     final TextEditingController edtNoTaxController = TextEditingController();
     final TextEditingController edtFPATaxController = TextEditingController();
@@ -24,7 +24,7 @@ class EndShiftDialog extends StatelessWidget {
       content: Padding(
         padding: EdgeInsets.all(4.0),
         child: Form(
-          key: _formKey,
+          key: formKey,
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -115,7 +115,7 @@ class EndShiftDialog extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
+                    if (formKey.currentState!.validate()) {
                       Navigator.pop(context);
 
                       Shift shift = Shift(

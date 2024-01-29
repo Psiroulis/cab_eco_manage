@@ -3,8 +3,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class RideSupplierProvider extends ChangeNotifier {
-  final DateTime _currentDay = DateTime.now();
-
   final DatabaseReference dbRef = FirebaseDatabase.instance.ref();
 
   final List<RideSupplier> _rideSuppliers = [];
@@ -13,21 +11,23 @@ class RideSupplierProvider extends ChangeNotifier {
 
   bool isLoading = true;
 
-  static const String RIDE_SUPPLIER_PATH = "ride_providers";
+  static const String RIDE_SUPPLIER_PATH = "ride_suppliers";
 
   void getAllRideSuppliers() {
-     dbRef.child('ride_providers').onValue.listen((event) {
-
-      if(!event.snapshot.exists){
-        print('Not existing must handle');
-      }else{
+    dbRef.child(RIDE_SUPPLIER_PATH).onValue.listen((event) {
+      if (!event.snapshot.exists) {
+        _rideSuppliers.clear();
+      } else {
         var dataFromServer = event.snapshot.value as Map;
+
         _rideSuppliers.clear();
 
         dataFromServer.forEach((key, value) {
-          var provider = RideSupplier.fromJson(key,value);
+          var provider = RideSupplier.fromJson(key, value);
           _rideSuppliers.add(provider);
         });
+
+        _rideSuppliers.sort((a, b) => a.name!.compareTo(b.name!));
       }
 
       isLoading = false;
@@ -37,23 +37,15 @@ class RideSupplierProvider extends ChangeNotifier {
   }
 
   void createRideSupplier(RideSupplier rideSupplier) {
-    isLoading = true;
-
-    notifyListeners();
-
-    String typeToSend;
-    if(rideSupplier.calculateType == CalculateType.percentage){
-      typeToSend = "percentage";
-    }else{
-      typeToSend = "perMonth";
-    }
-
     Map newProvider = {
       'name': rideSupplier.name,
+      'commissionType': rideSupplier.commissionType.toString(),
       'commission': rideSupplier.commission,
-      'calculation': typeToSend,
-      'costPerMonth': rideSupplier.costPerMonth,
-      'created_at': _currentDay.toString(),
+      'hasExtras': rideSupplier.hasExtras,
+      'extraCall': rideSupplier.extraCall,
+      'extraApoint': rideSupplier.extraApoint,
+      'hasSecretFees': rideSupplier.hasSecretFees,
+      'created_at': DateTime.now().toString(),
     };
 
     dbRef.child(RIDE_SUPPLIER_PATH).push().set(newProvider).then((value) {
@@ -62,33 +54,26 @@ class RideSupplierProvider extends ChangeNotifier {
     });
   }
 
-  void updateRideSupplier(RideSupplier rideSupplier){
-
+  void updateRideSupplier(RideSupplier rideSupplier) {
     print('Key income: ${rideSupplier.key}');
-
-    String typeToSend;
-    if(rideSupplier.calculateType == CalculateType.percentage){
-      typeToSend = "percentage";
-    }else{
-      typeToSend = "perMonth";
-    }
 
     final postData = {
       'name': rideSupplier.name,
+      'commissionType': rideSupplier.commissionType.toString(),
       'commission': rideSupplier.commission,
-      'calculation': typeToSend,
-      'costPerMonth': rideSupplier.costPerMonth,
-      'created_at': _currentDay.toString(),
+      'hasExtras': rideSupplier.hasExtras,
+      'extraCall': rideSupplier.extraCall,
+      'extraApoint': rideSupplier.extraApoint,
+      'hasSecretFees': rideSupplier.hasSecretFees,
+      'created_at': DateTime.now().toString(),
     };
 
     dbRef.child('$RIDE_SUPPLIER_PATH/${rideSupplier.key}').update(postData);
   }
 
-  void deleteRideSupplier(int index) {
-    String keyToDelete = _rideSuppliers[index].key!;
+  void deleteRideSupplier(String key) {
+    // String keyToDelete = _rideSuppliers[index].key!;
 
-    dbRef.child('$RIDE_SUPPLIER_PATH/$keyToDelete').remove();
+    dbRef.child('$RIDE_SUPPLIER_PATH/$key').remove();
   }
-
-
 }
