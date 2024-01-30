@@ -99,4 +99,12 @@ class HelperMethods {
     String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60).abs());
     return "$negativeSign${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
+
+  static String formatDateToReadable(DateTime dateTime) {
+    return '${dateTime.day}/${dateTime.month}/${dateTime.year}';
+  }
+
+  static String pathForOneShift(DateTime dateTime) {
+    return '${dateTime.year.toString()}/shifts/${currentMonthAsString(dateTime)}/key_${dateTime.day.toString()}';
+  }
 }

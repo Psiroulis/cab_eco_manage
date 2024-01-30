@@ -1,5 +1,5 @@
 import 'package:cab_economics/screens/ride_suppliers_screen.dart';
-import 'package:cab_economics/screens/shifts/add_new_shift_screen.dart';
+import 'package:cab_economics/screens/shifts_screen.dart';
 import 'package:flutter/material.dart';
 
 class MenuDrawer extends StatelessWidget {
@@ -12,28 +12,21 @@ class MenuDrawer extends StatelessWidget {
         children: [
           const DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.yellow,
+              color: Colors.amberAccent,
             ),
             child: Text('Menu'),
           ),
-          ExpansionTile(
-            title: const Text('Shifts'),
-            leading: const Icon(Icons.work_history),
-            childrenPadding: const EdgeInsets.only(left: 30),
-            children: [
-              ListTile(
-                leading: const Icon(Icons.add),
-                title: const Text('Add new Shift'),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddNewShiftScreen(),
-                      ));
-                },
-              )
-            ],
-          ),
+          ListTile(
+              leading: const Icon(Icons.work_history),
+              title: const Text('Shifts'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ShiftsScreen(),
+                  ),
+                );
+              }),
           ListTile(
             leading: const Icon(Icons.handshake),
             title: const Text('Ride Suppliers'),

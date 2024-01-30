@@ -22,7 +22,7 @@ class EndShiftDialog extends StatelessWidget {
     return AlertDialog(
       surfaceTintColor: Colors.white,
       content: Padding(
-        padding: EdgeInsets.all(4.0),
+        padding: const EdgeInsets.all(4.0),
         child: Form(
           key: formKey,
           child: SingleChildScrollView(

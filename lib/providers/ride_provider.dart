@@ -5,17 +5,18 @@ import 'package:flutter/material.dart';
 import '../models/ride.dart';
 
 class RideProvider extends ChangeNotifier {
+
   void createRide(DateTime shiftStart, Ride data) async {
     DatabaseReference ref =
         FirebaseDatabase.instance.ref(_createDbPathRides(shiftStart));
 
-
-
     Map newRide = {
-      'supplierId': data.supplier.key,
-      'supplier_name': data.supplier.name,
-      'fare': data.fare,
-      'payment_type' : data.paymentType.name.toString(),
+      'supplierName': data.supplierName,
+      'supplierKey': data.supplierKey,
+      'taximeterFare': data.taximeterFare,
+      'paymentType' : data.paymentType!.name.toString(),
+      'rideType' : data.rideType.toString(),
+      'extraCost' : data.extraCost,
       'created_at': DateTime.now().toString(),
     };
 
@@ -23,6 +24,6 @@ class RideProvider extends ChangeNotifier {
   }
 
   String _createDbPathRides(DateTime dateTime) {
-    return '${dateTime.year}/shifts/${HelperMethods.currentMonthAsString(dateTime)}/${dateTime.day.toString()}/rides';
+    return '${dateTime.year}/shifts/${HelperMethods.currentMonthAsString(dateTime)}/${dateTime.day}/rides';
   }
 }

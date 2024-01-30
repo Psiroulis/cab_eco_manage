@@ -50,7 +50,8 @@ class ShortShiftReportDialog extends StatelessWidget {
                   style: CustomTextStyles.mediumBlack(),
                 ),
                 Text(
-                  provider.runningShift.totalRides.toString(),
+                  '',
+                  //provider.runningShift.totalRides.toString(),
                   style: CustomTextStyles.mediumBlack(),
                 ),
               ],

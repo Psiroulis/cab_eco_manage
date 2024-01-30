@@ -1,9 +1,9 @@
 import 'package:cab_economics/helpers/CustomButtonStyles.dart';
 import 'package:cab_economics/helpers/CustomTextStyles.dart';
 import 'package:cab_economics/providers/shift_provider.dart';
-import 'package:cab_economics/widgets/add_new_ride_to_shift_dialog.dart';
 import 'package:cab_economics/widgets/end_shift_dialog.dart';
 import 'package:cab_economics/widgets/generic/menu_drawer.dart';
+import 'package:cab_economics/widgets/rides/add_dialog.dart';
 import 'package:cab_economics/widgets/shift_report_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -106,7 +106,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                                   .mediumWhite(),
                                             ),
                                             Text(
-                                              snapshot.runningShift.totalRides
+                                              'Todo here'
+                                                  //snapshot.runningShift.totalRides
                                                   .toString(),
                                               style: CustomTextStyles
                                                   .mediumWhite(),
@@ -273,9 +274,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 
   void _showAddRideDialog(BuildContext context) {
+    //todo: Bring Shift Start here
     showDialog(
       context: context,
-      builder: (context) => const AddNewRideDialog(),
+      builder: (context) => AddRideDialog(DateTime.now()),
     );
   }
 }
