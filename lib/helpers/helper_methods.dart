@@ -107,4 +107,8 @@ class HelperMethods {
   static String pathForOneShift(DateTime dateTime) {
     return '${dateTime.year.toString()}/shifts/${currentMonthAsString(dateTime)}/key_${dateTime.day.toString()}';
   }
+
+  static String pathForOneShiftWithKey(String key) {
+    return '${DateTime.now().year.toString()}/shifts/${currentMonthAsString(DateTime.now())}/key_$key';
+  }
 }

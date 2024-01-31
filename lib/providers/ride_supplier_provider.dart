@@ -76,4 +76,16 @@ class RideSupplierProvider extends ChangeNotifier {
 
     dbRef.child('$RIDE_SUPPLIER_PATH/$key').remove();
   }
+
+  Future<double> getSupplierCommission(String key) async {
+    final snapshot = await dbRef.child('$RIDE_SUPPLIER_PATH/$key').get();
+
+    if (snapshot.exists) {
+      final data = snapshot.value as Map;
+
+      return data['commission'] + 0.0;
+    }
+
+    return 0.0;
+  }
 }

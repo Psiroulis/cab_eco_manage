@@ -13,7 +13,9 @@ class ShiftProvider extends ChangeNotifier {
 
   bool? isShiftRunning = false;
 
-  late StreamSubscription<DatabaseEvent> sub1;
+  late StreamSubscription<DatabaseEvent> subForShiftList;
+
+  late StreamSubscription<DatabaseEvent> subForShortReport;
 
   late String runningShiftId;
 
@@ -22,6 +24,8 @@ class ShiftProvider extends ChangeNotifier {
   final List<Shift> _shifts = [];
 
   List<Shift> get shifts => _shifts;
+
+  bool isLoading = false;
 
   void checkIfShiftRuns() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -32,15 +36,12 @@ class ShiftProvider extends ChangeNotifier {
       isShiftRunning = true;
 
       runningShiftId = prefs.getString('runningShiftId')!;
-
-      getRunningShiftReport();
     }
 
     notifyListeners();
   }
 
-  Future<void> createShift(DateTime creationDateTime) async {
-
+  Future<void> createRunningShift(DateTime creationDateTime) async {
     Map newShift = {
       'day_of_week': HelperMethods.currentDayOfWeekAsString(creationDateTime),
       'start': creationDateTime.toString(),
@@ -51,9 +52,13 @@ class ShiftProvider extends ChangeNotifier {
       'total_black': 0,
       'fuel_litre_price': 0,
       'fuel_cost': 0,
+      'total_rides': 0,
     };
 
-    dbRef.child(HelperMethods.pathForOneShift(creationDateTime)).set(newShift).then((value) async {
+    dbRef
+        .child(HelperMethods.pathForOneShift(creationDateTime))
+        .set(newShift)
+        .then((value) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
       await prefs.setBool('haveShiftRunning', true);
@@ -64,14 +69,14 @@ class ShiftProvider extends ChangeNotifier {
 
       runningShiftId = creationDateTime.day.toString();
 
-      getRunningShiftReport();
-
       notifyListeners();
     });
   }
 
   Future<void> endShift(Shift shift) async {
-    await sub1.cancel();
+    isLoading = true;
+
+    notifyListeners();
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -92,35 +97,53 @@ class ShiftProvider extends ChangeNotifier {
 
       isShiftRunning = false;
 
+      isLoading = false;
+
+      subForShortReport.cancel();
+
       notifyListeners();
     });
   }
 
-  void getRunningShiftReport() async {
-    sub1 = FirebaseDatabase.instance
-        .ref(
-            '${currentDay.year.toString()}/shifts/${HelperMethods.currentMonthAsString(currentDay)}/$runningShiftId')
+  Future<void> getShortReportForHome(DateTime shiftDate) async {
+    subForShortReport = dbRef
+        .child(HelperMethods.pathForOneShift(shiftDate))
         .onValue
         .listen((event) {
-      if (event.snapshot.value != null) {
+      if (event.snapshot.exists) {
         final data = event.snapshot.value as Map;
 
-        runningShift = Shift.fromJson(data);
+        runningShift.totalRides = data['total_rides'];
+        runningShift.totalIncomeBlack = data['total_black'] + 0.0;
 
         notifyListeners();
       }
     });
   }
 
+  Future<Shift> getShiftReport(DateTime shiftDate) async {
+    var snapShot = await FirebaseDatabase.instance
+        .ref(HelperMethods.pathForOneShift(shiftDate))
+        .get();
+
+    if (snapShot.exists) {
+      final mappedData = snapShot.value as Map;
+
+      return Shift.fromJson(mappedData);
+    }
+
+    return Shift();
+  }
+
   void getAllCurrentMonthShifts() {
-    dbRef
+    isLoading = true;
+
+    subForShiftList = dbRef
         .child(
             '${currentDay.year.toString()}/shifts/${HelperMethods.currentMonthAsString(currentDay)}/')
         .onValue
         .listen((event) {
       if (event.snapshot.exists) {
-        print(event.snapshot.value);
-
         final data = event.snapshot.value as Map;
 
         _shifts.clear();
@@ -133,16 +156,17 @@ class ShiftProvider extends ChangeNotifier {
         _shifts.sort((a, b) => a.start!.compareTo(b.start!));
       } else {
         _shifts.clear();
-        print('No Data');
       }
+
+      isLoading = false;
 
       notifyListeners();
     });
   }
 
   Future<void> createShiftRetrochronized(Shift shift) async {
-    DatabaseReference ref =
-        FirebaseDatabase.instance.ref(HelperMethods.pathForOneShift(shift.start!));
+    DatabaseReference ref = FirebaseDatabase.instance
+        .ref(HelperMethods.pathForOneShift(shift.start!));
 
     Map newShift = {
       'day_of_week': HelperMethods.currentDayOfWeekAsString(shift.start!),
@@ -154,12 +178,15 @@ class ShiftProvider extends ChangeNotifier {
       'km': shift.km == 0 ? 0 : shift.km,
       'fuel_litre_price': shift.fuelLitrePrice == 0 ? 0 : shift.fuelLitrePrice,
       'fuel_cost': shift.fuelCost == 0 ? 0 : shift.fuelCost,
+      'total_rides': shift.totalRides,
     };
 
     ref.set(newShift).then((value) async {
       notifyListeners();
     });
   }
+
+  void unSubscribe() async {
+    await subForShiftList.cancel();
+  }
 }
-
-

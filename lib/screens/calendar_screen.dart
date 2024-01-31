@@ -1,10 +1,9 @@
 import 'package:cab_economics/helpers/CustomButtonStyles.dart';
 import 'package:cab_economics/helpers/CustomTextStyles.dart';
 import 'package:cab_economics/providers/shift_provider.dart';
-import 'package:cab_economics/widgets/end_shift_dialog.dart';
+import 'package:cab_economics/widgets/shifts/end_dialog.dart';
 import 'package:cab_economics/widgets/generic/menu_drawer.dart';
 import 'package:cab_economics/widgets/rides/add_dialog.dart';
-import 'package:cab_economics/widgets/shift_report_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../helpers/helper_methods.dart';
@@ -84,54 +83,48 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     } else {
                       return Column(
                         children: [
-                          GestureDetector(
-                            onTap: () {
-                              _showShiftReportDialog(context);
-                            },
-                            child: Card(
-                              color: Colors.black54,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'Total Rides: ',
-                                              style: CustomTextStyles
-                                                  .mediumWhite(),
-                                            ),
-                                            Text(
-                                              'Todo here'
-                                                  //snapshot.runningShift.totalRides
-                                                  .toString(),
-                                              style: CustomTextStyles
-                                                  .mediumWhite(),
-                                            )
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'Total BLK: ',
-                                              style: CustomTextStyles
-                                                  .mediumWhite(),
-                                            ),
-                                            Text(
-                                              '${snapshot.runningShift.totalIncomeBlack} €',
-                                              style: CustomTextStyles
-                                                  .mediumWhite(),
-                                            )
-                                          ],
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
+                          Card(
+                            color: Colors.black54,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Total Rides: ',
+                                            style:
+                                                CustomTextStyles.mediumWhite(),
+                                          ),
+                                          Text(
+                                            snapshot.runningShift.totalRides
+                                                .toString(),
+                                            style:
+                                                CustomTextStyles.mediumWhite(),
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Total BLK: ',
+                                            style:
+                                                CustomTextStyles.mediumWhite(),
+                                          ),
+                                          Text(
+                                            '${snapshot.runningShift.totalIncomeBlack} €',
+                                            style:
+                                                CustomTextStyles.mediumWhite(),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  )
+                                ],
                               ),
                             ),
                           ),
@@ -198,9 +191,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   void _startShift() {
     Provider.of<ShiftProvider>(context, listen: false)
-        .createShift(DateTime.now())
+        .createRunningShift(DateTime.now())
         .then((value) {
       _dismissLoadingDialog(context);
+      Provider.of<ShiftProvider>(context, listen: false)
+          .getShortReportForHome(DateTime.now());
     });
   }
 
@@ -266,15 +261,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
     showDialog(context: context, builder: (context) => endShiftDialog);
   }
 
-  void _showShiftReportDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => const ShortShiftReportDialog(),
-    );
-  }
-
   void _showAddRideDialog(BuildContext context) {
-    //todo: Bring Shift Start here
     showDialog(
       context: context,
       builder: (context) => AddRideDialog(DateTime.now()),

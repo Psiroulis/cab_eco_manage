@@ -20,6 +20,13 @@ class _ShiftsScreenState extends State<ShiftsScreen> {
   }
 
   @override
+  void deactivate() {
+    final provider = Provider.of<ShiftProvider>(context, listen: false);
+    provider.unSubscribe();
+    super.deactivate();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -27,15 +34,21 @@ class _ShiftsScreenState extends State<ShiftsScreen> {
       ),
       body: Consumer<ShiftProvider>(
         builder: (context, snapshot, child) {
-          if (snapshot.shifts.isEmpty) {
-            return const Center(
-              child: Text('No shift in current month'),
-            );
+          if (snapshot.isLoading == false) {
+            if (snapshot.shifts.isEmpty) {
+              return const Center(
+                child: Text('No shift in current month'),
+              );
+            } else {
+              return ListView.builder(
+                itemCount: snapshot.shifts.length,
+                itemBuilder: (context, index) =>
+                    ShiftSummaryCard(snapshot.shifts[index]),
+              );
+            }
           } else {
-            return ListView.builder(
-              itemCount: snapshot.shifts.length,
-              itemBuilder: (context, index) =>
-                  ShiftSummaryCard(snapshot.shifts[index]),
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           }
         },

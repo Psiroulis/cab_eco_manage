@@ -1,7 +1,10 @@
 import 'package:cab_economics/helpers/helper_methods.dart';
 import 'package:cab_economics/models/shift.dart';
+import 'package:cab_economics/providers/shift_provider.dart';
+import 'package:cab_economics/screens/shift_report_screen.dart';
 import 'package:cab_economics/widgets/rides/add_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ShiftSummaryCard extends StatelessWidget {
   final Shift shift;
@@ -12,7 +15,14 @@ class ShiftSummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print(shift.start!.day.toString());
+        Provider.of<ShiftProvider>(context, listen: false)
+            .getShiftReport(shift.start!)
+            .then(
+              (value) => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ShiftReportScreen(shift))),
+            );
       },
       child: Card(
         child: Padding(

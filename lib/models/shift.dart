@@ -1,6 +1,5 @@
-import 'package:cab_economics/models/ride.dart';
-
 class Shift {
+  String? day;
   DateTime? start;
   DateTime? end;
   int? km;
@@ -9,6 +8,7 @@ class Shift {
   double? totalIncomeBlack;
   double? totalIncome;
   double? totalFpa;
+  int? totalRides;
 
   Shift({
     this.start,
@@ -19,9 +19,11 @@ class Shift {
     this.totalIncomeBlack = 0.0,
     this.totalIncome = 0.0,
     this.totalFpa = 0.0,
+    this.totalRides = 0,
   });
 
   Shift.fromJson(Map<dynamic, dynamic> json) {
+    day = json['day_of_week'];
     start = DateTime.parse(json['start']);
     end = json['end'] == 'waiting...' ? null : DateTime.parse(json['end']);
     km = json['km'];
@@ -30,5 +32,6 @@ class Shift {
     totalIncomeBlack = json['total_black'] + 0.0;
     totalIncome = json['total_collection'] + 0.0;
     totalFpa = json['total_fpa'] + 0.0;
+    totalRides = json['total_rides'];
   }
 }

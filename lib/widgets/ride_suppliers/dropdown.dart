@@ -5,8 +5,11 @@ import 'package:provider/provider.dart';
 
 class RideSuppliersDropDown extends StatefulWidget {
   final Function(RideSupplier?) selectSupplierCallback;
+  final Function(RideSupplier?) initiationCallback;
 
-  const RideSuppliersDropDown(this.selectSupplierCallback, {super.key});
+  const RideSuppliersDropDown(
+      this.selectSupplierCallback, this.initiationCallback,
+      {super.key});
 
   @override
   State<RideSuppliersDropDown> createState() => _RideSuppliersDropDownState();
@@ -15,8 +18,11 @@ class RideSuppliersDropDown extends StatefulWidget {
 class _RideSuppliersDropDownState extends State<RideSuppliersDropDown> {
   @override
   void initState() {
-    final provider = Provider.of<RideSupplierProvider>(context, listen: false);
-    provider.getAllRideSuppliers();
+    Future.delayed(Duration.zero, () {
+      final provider =
+          Provider.of<RideSupplierProvider>(context, listen: false);
+      provider.getAllRideSuppliers();
+    });
     super.initState();
   }
 
@@ -29,6 +35,8 @@ class _RideSuppliersDropDownState extends State<RideSuppliersDropDown> {
         } else {
           RideSupplier initialSupplier = snapshot.rideSuppliers
               .firstWhere((element) => element.name == "Road");
+
+          widget.initiationCallback(initialSupplier);
 
           return DropdownMenu<RideSupplier?>(
             initialSelection: initialSupplier,

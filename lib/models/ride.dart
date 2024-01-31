@@ -1,6 +1,3 @@
-import 'package:cab_economics/models/ride_supplier.dart';
-import 'package:cab_economics/providers/ride_provider.dart';
-
 enum PaymentType {
   cash,
   creditCard,
@@ -38,24 +35,25 @@ class Ride {
     key = keyFromApi;
     supplierName = json['supplierName'];
     supplierKey = json['supplierKey'];
-    taximeterFare = json['taximeterFare'];
+    taximeterFare = json['taximeterFare'] + 0.0;
 
-    if (json['paymentType'] == PaymentType.cash.toString()) {
+    if (json['paymentType'] == PaymentType.cash.name) {
       paymentType = PaymentType.cash;
-    } else if (json['paymentType'] == PaymentType.creditCard.toString()) {
+    } else if (json['paymentType'] == PaymentType.creditCard.name) {
       paymentType = PaymentType.creditCard;
     } else {
       paymentType = PaymentType.supplierCredit;
     }
 
-    if (json['rideType'] == RideType.none) {
+    if (json['rideType'] == RideType.none.name) {
       rideType = RideType.none;
-    } else if (json['rideType'] == RideType.call) {
+    } else if (json['rideType'] == RideType.call.name) {
       rideType = RideType.call;
     } else {
       rideType = RideType.appointment;
     }
 
     extraCost = json['extraCost'] + 0.0;
+    createdAt = DateTime.parse(json['created_at']);
   }
 }
