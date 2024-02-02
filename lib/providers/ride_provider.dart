@@ -48,6 +48,7 @@ class RideProvider extends ChangeNotifier {
 
           notifyListeners();
         });
+
       } else {
         isLoading = false;
 

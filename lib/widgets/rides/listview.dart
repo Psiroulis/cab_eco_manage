@@ -1,6 +1,8 @@
 import 'package:cab_economics/helpers/caclulations_helper.dart';
 import 'package:cab_economics/helpers/helper_methods.dart';
+import 'package:cab_economics/models/ride_supplier.dart';
 import 'package:cab_economics/providers/ride_provider.dart';
+import 'package:cab_economics/providers/ride_supplier_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,12 +16,40 @@ class RidesListView extends StatefulWidget {
 }
 
 class _RidesListViewState extends State<RidesListView> {
+  double commissionAmount = 0.0;
+  List<double> commissions = [];
+
   @override
   void initState() {
     Future.delayed(Duration.zero, () async {
+      List<double> newsCom = [];
+
       final provider = Provider.of<RideProvider>(context, listen: false);
 
-      provider.getAllDateRides(widget.rideDate);
+      await provider.getAllDateRides(widget.rideDate);
+
+      final rideList = provider.rides;
+
+      for (var element in rideList) {
+
+        await Provider.of<RideSupplierProvider>(context, listen: false)
+            .getSupplierCommission(element.supplierKey!)
+            .then((value) {
+              double rideCommissionAmount = CalculationHelper.calculateCommission(
+              value, element.taximeterFare! + element.extraCost!);
+
+          newsCom.add(rideCommissionAmount);
+        });
+      }
+
+      setState(() {
+        print('setstate runs');
+        commissions = newsCom;
+      });
+
+
+
+
     });
 
     super.initState();
@@ -27,8 +57,6 @@ class _RidesListViewState extends State<RidesListView> {
 
   @override
   Widget build(BuildContext context) {
-    bool cardIsPressed = false;
-
     return Consumer<RideProvider>(
       builder: (context, snapShot, _) {
         if (snapShot.isLoading == false) {
@@ -105,7 +133,9 @@ class _RidesListViewState extends State<RidesListView> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text('Commission Amount:'),
-                        Text(' €'),
+                        Text(commissions.isNotEmpty
+                            ? '${commissions[index]} €'
+                            : 'nan'),
                       ],
                     ),
                   ],

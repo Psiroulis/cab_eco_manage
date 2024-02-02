@@ -16,40 +16,49 @@ class RideSuppliersDropDown extends StatefulWidget {
 }
 
 class _RideSuppliersDropDownState extends State<RideSuppliersDropDown> {
+  List<RideSupplier> _suppliers = [];
+
+  void getSuppliers() async {
+    await Provider.of<RideSupplierProvider>(context, listen: false)
+        .getSuppliers()
+        .then((value) {
+      setState(() {
+        _suppliers = value;
+      });
+    });
+  }
+
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
-      final provider =
-          Provider.of<RideSupplierProvider>(context, listen: false);
-      provider.getAllRideSuppliers();
+      getSuppliers();
     });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RideSupplierProvider>(
-      builder: (context, snapshot, child) {
-        if (snapshot.rideSuppliers.isEmpty) {
-          return const CircularProgressIndicator();
-        } else {
-          RideSupplier initialSupplier = snapshot.rideSuppliers
-              .firstWhere((element) => element.name == "Road");
+    print('supplier dropdown builds');
+    if (_suppliers.isEmpty) {
+      print('supplier dropdown builds 1');
+      return const CircularProgressIndicator();
+    } else {
+      RideSupplier initial =
+          _suppliers.where((element) => element.name == 'Road').first;
 
-          widget.initiationCallback(initialSupplier);
+      print('supplier dropdown builds 2');
+      widget.initiationCallback(initial);
 
-          return DropdownMenu<RideSupplier?>(
-            initialSelection: initialSupplier,
-            onSelected: (value) {
-              widget.selectSupplierCallback(value!);
-            },
-            dropdownMenuEntries: snapshot.rideSuppliers
-                .map<DropdownMenuEntry<RideSupplier>>((RideSupplier supplier) {
-              return DropdownMenuEntry(value: supplier, label: supplier.name!);
-            }).toList(),
-          );
-        }
-      },
-    );
+      return DropdownMenu<RideSupplier?>(
+        initialSelection: initial,
+        onSelected: (value) {
+          widget.selectSupplierCallback(value!);
+        },
+        dropdownMenuEntries: _suppliers
+            .map<DropdownMenuEntry<RideSupplier>>((RideSupplier supplier) {
+          return DropdownMenuEntry(value: supplier, label: supplier.name!);
+        }).toList(),
+      );
+    }
   }
 }

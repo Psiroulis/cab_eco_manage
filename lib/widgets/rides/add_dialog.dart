@@ -27,6 +27,8 @@ class _AddRideDialogState extends State<AddRideDialog> {
 
   final TextEditingController _tecAmount = TextEditingController();
 
+  bool _supplierDropdownFirstBuild = true;
+
   @override
   Widget build(BuildContext context) {
     return Dialog.fullscreen(
@@ -78,24 +80,7 @@ class _AddRideDialogState extends State<AddRideDialog> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text('Supplier:'),
-                          RideSuppliersDropDown((supplier) {
-                            _rideSupplier = supplier!;
-                            if (supplier.hasExtras!) {
-                              setState(() {
-                                _supplierHasExtras = true;
-                                _callExtra = supplier.extraCall;
-                                _appointExtra = supplier.extraApoint;
-                                _rideType = RideType.call;
-                              });
-                            } else {
-                              setState(() {
-                                _supplierHasExtras = false;
-                                _callExtra = 0;
-                                _appointExtra = 0;
-                                _rideType = RideType.none;
-                              });
-                            }
-                          }, initiateRideSupplier),
+                          child!,
                         ],
                       ),
                       if (_supplierHasExtras)
@@ -196,11 +181,32 @@ class _AddRideDialogState extends State<AddRideDialog> {
             );
           }
         },
+        child: RideSuppliersDropDown((supplier) {
+          _rideSupplier = supplier!;
+          if (supplier.hasExtras!) {
+            setState(() {
+              _supplierHasExtras = true;
+              _callExtra = supplier.extraCall;
+              _appointExtra = supplier.extraApoint;
+              _rideType = RideType.call;
+            });
+          } else {
+            setState(() {
+              _supplierHasExtras = false;
+              _callExtra = 0;
+              _appointExtra = 0;
+              _rideType = RideType.none;
+            });
+          }
+        }, initiateRideSupplier),
       ),
     );
   }
 
   void initiateRideSupplier(RideSupplier? supplier) {
-    _rideSupplier = supplier!;
+    if (_supplierDropdownFirstBuild) {
+      _rideSupplier = supplier!;
+      _supplierDropdownFirstBuild = false;
+    }
   }
 }

@@ -36,9 +36,17 @@ class ShiftProvider extends ChangeNotifier {
       isShiftRunning = true;
 
       runningShiftId = prefs.getString('runningShiftId')!;
-    }
 
-    notifyListeners();
+      var runningShiftDate = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        int.parse(runningShiftId),
+      );
+
+      getShortReportForHome(runningShiftDate);
+
+      notifyListeners();
+    }
   }
 
   Future<void> createRunningShift(DateTime creationDateTime) async {

@@ -12,6 +12,28 @@ class RideSupplierProvider extends ChangeNotifier {
   bool isLoading = true;
 
   static const String RIDE_SUPPLIER_PATH = "ride_suppliers";
+  
+  Future<List<RideSupplier>> getSuppliers () async {
+
+     List<RideSupplier> suppliers = [];
+    
+    final snapshot = await dbRef.child(RIDE_SUPPLIER_PATH).get();
+
+    if(snapshot.exists) {
+      final data = snapshot.value as Map;
+
+      data.forEach((key, value) {
+        final supplier = RideSupplier.fromJson(key, value);
+        suppliers.add(supplier);
+      });
+
+      return suppliers;
+    }else{
+
+      return suppliers;
+    }
+    
+  }
 
   void getAllRideSuppliers() {
     dbRef.child(RIDE_SUPPLIER_PATH).onValue.listen((event) {
@@ -88,4 +110,8 @@ class RideSupplierProvider extends ChangeNotifier {
 
     return 0.0;
   }
+
+
 }
+
+

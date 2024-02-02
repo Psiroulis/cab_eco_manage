@@ -1,20 +1,9 @@
-import 'package:cab_economics/providers/ride_supplier_provider.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:cab_economics/models/ride_supplier.dart';
 
 class CalculationHelper {
+  static double calculateCommission(double commission, double fare) {
+    print('calculation helper${(fare * commission) / 100}');
 
-  static Future<double> calculateCommission(
-      BuildContext context, String supplierKey, double fare) async {
-
-    double result = 24.0;
-
-    final provider = Provider.of<RideSupplierProvider>(context, listen: false);
-
-    await provider.getSupplierCommission(supplierKey).then((commission) {
-      result = (fare * commission) / 100;
-    });
-
-    return result;
+    return (fare * commission) / 100;
   }
 }
