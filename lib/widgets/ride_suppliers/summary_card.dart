@@ -72,7 +72,7 @@ class _RideSupplierSummaryCardState extends State<RideSupplierSummaryCard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text('Appointment:'),
-                        Text(widget.rideSupplier.extraApoint.toString()),
+                        Text(widget.rideSupplier.extraAppoint.toString()),
                       ],
                     ),
                   ),

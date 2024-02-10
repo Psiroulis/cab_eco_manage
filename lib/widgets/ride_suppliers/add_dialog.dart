@@ -286,7 +286,7 @@ class _AddRideSupplierDialogState extends State<AddRideSupplierDialog> {
                             supplier.hasExtras = true;
                             supplier.extraCall =
                                 double.tryParse(_tecCallExtra.text);
-                            supplier.extraApoint =
+                            supplier.extraAppoint =
                                 double.tryParse(_tecAppointmentExtra.text);
                           }
 

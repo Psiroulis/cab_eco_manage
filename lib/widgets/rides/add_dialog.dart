@@ -19,6 +19,7 @@ class _AddRideDialogState extends State<AddRideDialog> {
   final _formKey = GlobalKey<FormState>();
 
   bool _supplierHasExtras = false;
+  bool _supplierHasSecretFees = false;
   double? _callExtra = 0;
   double? _appointExtra = 0;
   RideType? _rideType = RideType.none;
@@ -26,6 +27,8 @@ class _AddRideDialogState extends State<AddRideDialog> {
   PaymentType _paymentType = PaymentType.cash;
 
   final TextEditingController _tecAmount = TextEditingController();
+  final TextEditingController _tecCustomAmount = TextEditingController();
+  final TextEditingController _tecCustomFee = TextEditingController();
 
   bool _supplierDropdownFirstBuild = true;
 
@@ -83,7 +86,7 @@ class _AddRideDialogState extends State<AddRideDialog> {
                           child!,
                         ],
                       ),
-                      if (_supplierHasExtras)
+                      if (_supplierHasExtras && !_supplierHasSecretFees)
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -114,6 +117,86 @@ class _AddRideDialogState extends State<AddRideDialog> {
                                   },
                                 ),
                               ),
+                            ),
+                          ],
+                        ),
+                      if (_supplierHasExtras && _supplierHasSecretFees)
+                        Column(
+                          children: [
+                            ListTile(
+                              title: Text('Call + $_callExtra'),
+                              leading: Radio<RideType>(
+                                value: RideType.call,
+                                groupValue: _rideType,
+                                onChanged: (RideType? value) {
+                                  setState(() {
+                                    _rideType = value;
+                                  });
+                                },
+                              ),
+                            ),
+                            ListTile(
+                              title: Text('Appointment + $_appointExtra'),
+                              leading: Radio<RideType>(
+                                value: RideType.appointment,
+                                groupValue: _rideType,
+                                onChanged: (RideType? value) {
+                                  setState(() {
+                                    _rideType = value;
+                                  });
+                                },
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Radio<RideType>(
+                                  value: RideType.fixedWithFees,
+                                  groupValue: _rideType,
+                                  onChanged: (RideType? value) {
+                                    setState(() {
+                                      _rideType = value;
+                                    });
+                                  },
+                                ),
+                                const Text('Custom'),
+                                SizedBox(
+                                  width: 100,
+                                  child: TextFormField(
+                                    controller: _tecCustomAmount,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return '* Required';
+                                      }
+
+                                      return null;
+                                    },
+                                    decoration: const InputDecoration(
+                                      label: Text('Amount'),
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    keyboardType: TextInputType.number,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 100,
+                                  child: TextFormField(
+                                    controller: _tecCustomFee,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return '* Required';
+                                      }
+
+                                      return null;
+                                    },
+                                    decoration: const InputDecoration(
+                                      label: Text('Fee'),
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    keyboardType: TextInputType.number,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -151,8 +234,15 @@ class _AddRideDialogState extends State<AddRideDialog> {
                                   ride.extraCost = 0;
                                 } else if (_rideType == RideType.call) {
                                   ride.extraCost = _callExtra;
-                                } else {
+                                } else if (_rideType == RideType.appointment) {
                                   ride.extraCost = _appointExtra;
+                                } else if (_rideType ==
+                                    RideType.fixedWithFees) {
+                                  ride.taximeterFare =
+                                      double.tryParse(_tecCustomAmount.text);
+                                  ride.extraCost = 0;
+                                  ride.fee =
+                                      double.tryParse(_tecCustomFee.text);
                                 }
 
                                 Provider.of<RideProvider>(context,
@@ -186,13 +276,19 @@ class _AddRideDialogState extends State<AddRideDialog> {
           if (supplier.hasExtras!) {
             setState(() {
               _supplierHasExtras = true;
+              if (supplier.hasSecretFees!) {
+                _supplierHasSecretFees = true;
+              } else {
+                _supplierHasSecretFees = false;
+              }
               _callExtra = supplier.extraCall;
-              _appointExtra = supplier.extraApoint;
+              _appointExtra = supplier.extraAppoint;
               _rideType = RideType.call;
             });
           } else {
             setState(() {
               _supplierHasExtras = false;
+              _supplierHasSecretFees = false;
               _callExtra = 0;
               _appointExtra = 0;
               _rideType = RideType.none;

@@ -48,7 +48,7 @@ class _EditRideSupplierDialogState extends State<EditRideSupplierDialog> {
       _tecCallExtra = TextEditingController();
       _tecAppointmentExtra = TextEditingController();
       _tecCallExtra.text = widget.rideSupplier.extraCall.toString();
-      _tecAppointmentExtra.text = widget.rideSupplier.extraApoint.toString();
+      _tecAppointmentExtra.text = widget.rideSupplier.extraAppoint.toString();
     }
 
     if (widget.rideSupplier.hasSecretFees!) {
@@ -317,11 +317,11 @@ class _EditRideSupplierDialogState extends State<EditRideSupplierDialog> {
                           if (_hasExtras) {
                             supplier.extraCall =
                                 double.tryParse(_tecCallExtra.text);
-                            supplier.extraApoint =
+                            supplier.extraAppoint =
                                 double.tryParse(_tecAppointmentExtra.text);
                           } else {
                             supplier.extraCall = 0.0;
-                            supplier.extraApoint = 0.0;
+                            supplier.extraAppoint = 0.0;
                           }
 
                           supplier.hasExtras = _hasExtras;

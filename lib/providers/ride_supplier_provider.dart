@@ -65,7 +65,7 @@ class RideSupplierProvider extends ChangeNotifier {
       'commission': rideSupplier.commission,
       'hasExtras': rideSupplier.hasExtras,
       'extraCall': rideSupplier.extraCall,
-      'extraApoint': rideSupplier.extraApoint,
+      'extraApoint': rideSupplier.extraAppoint,
       'hasSecretFees': rideSupplier.hasSecretFees,
       'created_at': DateTime.now().toString(),
     };
@@ -85,7 +85,7 @@ class RideSupplierProvider extends ChangeNotifier {
       'commission': rideSupplier.commission,
       'hasExtras': rideSupplier.hasExtras,
       'extraCall': rideSupplier.extraCall,
-      'extraApoint': rideSupplier.extraApoint,
+      'extraApoint': rideSupplier.extraAppoint,
       'hasSecretFees': rideSupplier.hasSecretFees,
       'created_at': DateTime.now().toString(),
     };

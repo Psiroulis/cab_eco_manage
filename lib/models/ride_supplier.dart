@@ -7,7 +7,7 @@ class RideSupplier {
   double? commission;
   bool? hasExtras;
   double? extraCall;
-  double? extraApoint;
+  double? extraAppoint;
   bool? hasSecretFees;
 
   RideSupplier({
@@ -17,7 +17,7 @@ class RideSupplier {
     this.commission = 0.0,
     this.hasExtras = false,
     this.extraCall = 0.0,
-    this.extraApoint = 0.0,
+    this.extraAppoint = 0.0,
     this.hasSecretFees = false,
   });
 
@@ -39,7 +39,7 @@ class RideSupplier {
 
     extraCall = json['extraCall'] + 0.0;
 
-    extraApoint = json['extraApoint'] + 0.0;
+    extraAppoint = json['extraApoint'] + 0.0;
 
     hasSecretFees = json['hasSecretFees'];
   }

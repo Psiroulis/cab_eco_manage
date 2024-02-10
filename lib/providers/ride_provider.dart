@@ -1,3 +1,4 @@
+import 'package:cab_economics/helpers/firebasePaths.dart';
 import 'package:cab_economics/helpers/helper_methods.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ class RideProvider extends ChangeNotifier {
       'paymentType': data.paymentType!.name.toString(),
       'rideType': data.rideType!.name.toString(),
       'extraCost': data.extraCost,
+      'fee' : data.fee,
       'created_at': DateTime.now().toString(),
     };
 
@@ -43,12 +45,25 @@ class RideProvider extends ChangeNotifier {
         ref.child(HelperMethods.pathForOneShift(shiftStart)).update({
           'total_black': double.parse(d.toStringAsFixed(2)),
           'total_rides': dataFromDb['total_rides'] + 1,
-        }).then((value) {
+        }).then((value) async {
+          //get current supplier month data
+
+          final supplierSnapshot = await ref.child(
+              FirebasePaths.pathToSaveSupplierInfoPerMonth(
+                  shiftStart, data.supplierKey!)).get();
+
+          if(snapShot.exists){
+
+          }else{
+
+          }
+          // add new data
+          //update suppliers month data
+
           isLoading = false;
 
           notifyListeners();
         });
-
       } else {
         isLoading = false;
 

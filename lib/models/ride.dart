@@ -8,6 +8,8 @@ enum RideType {
   none,
   call,
   appointment,
+  fixed,
+  fixedWithFees,
 }
 
 class Ride {
@@ -18,6 +20,7 @@ class Ride {
   PaymentType? paymentType;
   RideType? rideType;
   double? extraCost;
+  double? fee;
   DateTime? createdAt;
 
   Ride({
@@ -54,6 +57,7 @@ class Ride {
     }
 
     extraCost = json['extraCost'] + 0.0;
+    fee = json['fee'] == null ? 0 :  json['fee'] + 0.0;
     createdAt = DateTime.parse(json['created_at']);
   }
 }
