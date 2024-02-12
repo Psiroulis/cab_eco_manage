@@ -262,9 +262,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 
   void _showAddRideDialog(BuildContext context) {
+    final shiftProvider = Provider.of<ShiftProvider>(context,listen: false);
+    final runningShiftDatetime = shiftProvider.runningShift.start!;
     showDialog(
       context: context,
-      builder: (context) => AddRideDialog(DateTime.now()),
+      builder: (context) => AddRideDialog(runningShiftDatetime),
     );
   }
 }

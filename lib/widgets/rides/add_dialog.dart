@@ -165,8 +165,10 @@ class _AddRideDialogState extends State<AddRideDialog> {
                                   child: TextFormField(
                                     controller: _tecCustomAmount,
                                     validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return '* Required';
+                                      if (_rideType == RideType.fixedWithFees) {
+                                        if (value == null || value.isEmpty) {
+                                          return '* Required';
+                                        }
                                       }
 
                                       return null;
@@ -183,8 +185,10 @@ class _AddRideDialogState extends State<AddRideDialog> {
                                   child: TextFormField(
                                     controller: _tecCustomFee,
                                     validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return '* Required';
+                                      if (_rideType == RideType.fixedWithFees) {
+                                        if (value == null || value.isEmpty) {
+                                          return '* Required';
+                                        }
                                       }
 
                                       return null;
